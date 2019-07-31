@@ -18,6 +18,12 @@ lidar.start()
 print("...")
 time.sleep(3)
 
+print("get data")
+data = np.zeros((171, 224), dtype=np.double)
+data = lidar.get_data(data)
+
+
 print('stop')
 lidar.stop()
 lidar.destroy()
+

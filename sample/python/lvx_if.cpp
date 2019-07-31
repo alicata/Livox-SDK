@@ -76,11 +76,10 @@ void GetLidarData(uint8_t handle, LivoxEthPacket *data, uint32_t data_num, void 
 
       point_packet_list.push_back(packet);
 
-      uint32_t max_points = std::min<uint32_t>(10, data_num);
-      for (uint32_t i; i < max_points; i++)
+      uint32_t max_points = 2;//std::min<uint32_t>(10, data_num);
+      for (uint32_t i; i < 2; i++)
       {
-          //printf("x=%lf \n", data[i].x);
-          printf("p=(%f,%f,%f)\n", packet.point[i].x, packet.point[i].y, packet.point[i].z);
+          printf("point cloud: p=(%f,%f,%f)\n", packet.point[i].x, packet.point[i].y, packet.point[i].z);
       }
 
       if (point_packet_list.size() % (50 * broadcast_code_list.size()) == 0) {
@@ -321,6 +320,30 @@ bool Lidar::destroy() {
 
 py::array_t<double> Lidar::get_data(py::array_t<double> input)
 {
+    size_t N = point_packet_list.size();
+    printf("num points: %d\n", (int)N);
+    int PACK_POINT_NUM = 100;
+    for (LvxBasePackDetail packet : point_packet_list) {
+        for (int j; j < PACK_POINT_NUM; j++) {
+	    float x = packet.point[j].x;
+	    float y = packet.point[j].y;
+	    float z = packet.point[j].z;
+            printf("p=(%f,%f,%f)\n", x, y, z);
+	}
+    }
+
+    /*
+    for (int i; i < N; i++)
+    {
+	LvxBasePackDetail packet;
+	    
+        //packet = point_packet_list.pop_back();
+	//float x = p.point[0].x;
+
+        printf("%d x=%lf\n", (int)N, x);
+
+    } 
+    */
     return input;
 }
  
