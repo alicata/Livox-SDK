@@ -1,5 +1,6 @@
 # Python bindings.
-This forked project add python bindings to the Livox-SDK
+Fork Livox-SDK and add python bindings.
+git clone --recursive https://github.com/alicata/Livox-SDK.git
 
 # 1 Introduction
 
