@@ -1,3 +1,6 @@
+# Python bindings.
+This forked project add python bindings to the Livox-SDK
+
 # 1 Introduction
 
 Livox SDK is the software development kit designed for all Livox products. It is developed based on C/C++ following Livox SDK Communication Protocol, and provides easy-to-use C style API. With Livox SDK, users can quickly connect to Livox products and receive point cloud data. 
