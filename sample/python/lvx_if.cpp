@@ -69,16 +69,17 @@ void GetLidarData(uint8_t handle, LivoxEthPacket *data, uint32_t data_num, void 
       //LivoxRawPoint* data = (LivoxRawPoint *)p; 
       //LivoxRawPoint *data = (LivoxRawPoint *)(data->data[0]);
 
-
+     
 
       lvx_file_handler.BasePointsHandle(data, packet);
       lvx_file_handler.CalcExtrinsicPoints(packet);
 
       point_packet_list.push_back(packet);
-
+      printf("list points ...\n");
       uint32_t max_points = 2;//std::min<uint32_t>(10, data_num);
       for (uint32_t i; i < 2; i++)
-      {
+      {  
+	  printf("print point ...");
           printf("point cloud: p=(%f,%f,%f)\n", packet.point[i].x, packet.point[i].y, packet.point[i].z);
       }
 
