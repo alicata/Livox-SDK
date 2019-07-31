@@ -2,6 +2,9 @@
 Fork Livox-SDK and add python bindings.
 ```
 git clone --recursive https://github.com/alicata/Livox-SDK.git
+cd build
+../build.sh
+
 ```
 
 # 1 Introduction
