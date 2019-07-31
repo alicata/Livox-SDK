@@ -16,7 +16,7 @@ target_link_libraries(lvx_binding PUBLIC /home/pi/miniconda3/envs/cxx/lib/libboo
 target_include_directories(lvx_binding SYSTEM PUBLIC /home/pi/Livox-SDK/sdk_core/include)
 target_link_libraries(lvx_binding PUBLIC /home/pi/Livox-SDK/build/sdk_core/liblivox_sdk_static.a)
 
-install (TARGETS lvx_binding DESTINATION ../../bin) 
+install (TARGETS lvx_binding DESTINATION ../../../bin) 
     
 
 
