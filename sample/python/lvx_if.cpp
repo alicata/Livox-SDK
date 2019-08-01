@@ -61,27 +61,11 @@ void GetLidarData(uint8_t handle, LivoxEthPacket *data, uint32_t data_num, void 
       LvxBasePackDetail packet;
       packet.device_index = handle;
 
-      printf("------------------\n");
-      printf("point cloud: id %d\n", data->id);
-      printf("point cloud: N %d \n", data_num);
-     
-      uint8_t* p = data->data;
-      //LivoxRawPoint* data = (LivoxRawPoint *)p; 
-      //LivoxRawPoint *data = (LivoxRawPoint *)(data->data[0]);
-
-     
-
+      //printf("point cloud: id %d\n", data->id);
+      //printf("point cloud: N %d \n", data_num);
       lvx_file_handler.BasePointsHandle(data, packet);
       lvx_file_handler.CalcExtrinsicPoints(packet);
-
       point_packet_list.push_back(packet);
-      printf("list points ...\n");
-      uint32_t max_points = 2;//std::min<uint32_t>(10, data_num);
-      for (uint32_t i; i < 2; i++)
-      {  
-	  printf("print point ...");
-          printf("point cloud: p=(%f,%f,%f)\n", packet.point[i].x, packet.point[i].y, packet.point[i].z);
-      }
 
       if (point_packet_list.size() % (50 * broadcast_code_list.size()) == 0) {
         condition_variable.notify_one();
@@ -334,6 +318,14 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input)
     int i = 0;
     for (LvxBasePackDetail packet : point_packet_list) {
 	printf("lidar index: %d\n", packet.lidar_index);
+	//uint8_t device_index;
+        printf("uint8_t port_id %d\n", packet.port_id);
+        //uint8_t rsvd;
+        //uint32_t error_code;
+        //uint8_t timestamp_type;
+        //uint8_t data_type;
+	double* t = (double*)&packet.timestamp[0];
+        printf("uint8_t timestamp[8] %ld\n", *t);
 	//LivoxPoint* pp = packet.point;
         printf("LivoxPoint array in packet.point: %ld\n", sizeof(packet.point));
         for (int j=0; j < PACK_POINT_NUM; j++) {
