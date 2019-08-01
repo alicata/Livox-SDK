@@ -76,7 +76,7 @@ void GetLidarData(uint8_t handle, LivoxEthPacket *data, uint32_t data_num, void 
 
 /** Callback function of starting sampling. */
 void OnSampleCallback(uint8_t status, uint8_t handle, uint8_t response, void *data) {
-  printf("OnSampleCallback statue %d handle %d response %d \n", status, handle, response);
+  //printf("OnSampleCallback statue %d handle %d response %d \n", status, handle, response);
   if (status == kStatusSuccess) {
     if (response != 0) {
       devices[handle].device_state = kDeviceStateConnect;
@@ -94,7 +94,7 @@ void OnStopSampleCallback(uint8_t status, uint8_t handle, uint8_t response, void
 void OnGetLidarExtrinsicParameter(uint8_t status, uint8_t handle, LidarGetExtrinsicParameterResponse *response, void *data) {
   if (status == kStatusSuccess) {
     if (response != 0) {
-      printf("OnGetLidarExtrinsicParameter statue %d handle %d response %d \n", status, handle, response->ret_code);
+      //printf("OnGetLidarExtrinsicParameter statue %d handle %d response %d \n", status, handle, response->ret_code);
       std::lock_guard<std::mutex> lock(mtx);
       LvxDeviceInfo lidar_info;
       strncpy((char *)lidar_info.lidar_broadcast_code, devices[handle].info.broadcast_code, kBroadcastCodeSize);
@@ -150,7 +150,7 @@ void OnDeviceChange(const DeviceInfo *info, DeviceEvent type) {
   if (info == nullptr) {
     return;
   }
-  printf("OnDeviceChange broadcast code %s update type %d\n", info->broadcast_code, type);
+  //printf("OnDeviceChange broadcast code %s update type %d\n", info->broadcast_code, type);
   uint8_t handle = info->handle;
   if (handle >= kMaxLidarCount) {
     return;
@@ -310,7 +310,7 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
     //printf("num points: %d\n", (int)N);
 
     //py::array_t<double> output;
-    auto result = py::array_t<double>(N*PACK_POINT_NUM);
+    auto result = py::array_t<double>(N*PACK_POINT_NUM*3);
     py::buffer_info buf_output = result.request();
     double * optr = (double *) buf_output.ptr;
 
