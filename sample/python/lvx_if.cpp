@@ -309,17 +309,17 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
     int PACK_POINT_NUM = 100;
     //printf("num points: %d\n", (int)N);
 
-    py::array_t<double> output;
-    //auto result = py::array_t<double>(output.size);
-    //py::buffer_info buf_output = result.request();
-    //double * ptr_output = (double *) buf_output.ptr;
+    //py::array_t<double> output;
+    auto result = py::array_t<double>(N*PACK_POINT_NUM);
+    py::buffer_info buf_output = result.request();
+    double * optr = (double *) buf_output.ptr;
 
 
     int i = 0;
     for (LvxBasePackDetail packet : point_packet_list) {
-	printf("lidar index: %d\n", packet.lidar_index);
+	//printf("lidar index: %d\n", packet.lidar_index);
 	//uint8_t device_index;
-        printf("uint8_t error %d\n", packet.error_code);
+        //printf("uint8_t error %d\n", packet.error_code);
         //uint8_t rsvd;
         //uint32_t error_code;
         //uint8_t timestamp_type;
@@ -327,23 +327,23 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
 	long* t = (long*)&packet.timestamp[0];
 	for (int i=0; i < 8; i++) 
 	{
-	    printf("%d, ", packet.timestamp[i]);
+	    //printf("%d, ", packet.timestamp[i]);
 	}
 
-        printf("uint8_t timestamp[8] %ld\n", *t);
+        //printf("uint8_t timestamp[8] %ld\n", *t);
 	//LivoxPoint* pp = packet.point;
-        printf("LivoxPoint array in packet.point: %ld\n", sizeof(packet.point));
+        //printf("LivoxPoint array in packet.point: %ld\n", sizeof(packet.point));
         for (int j=0; j < PACK_POINT_NUM; j++) {
 	    float x = packet.point[j].x;
 	    float y = packet.point[j].y;
 	    float z = packet.point[j].z;
-	    //output[i*3+0] = x;
-	    //output[i*3+1] = y;
-	    //output[i*3+2] = z;
-            printf("p[]=(%f,%f,%f)\n",  x, y, z);
+	    optr[i*3+0] = x;
+	    optr[i*3+1] = y;
+	    optr[i*3+2] = z;
+            //printf("p[]=(%f,%f,%f)\n",  x, y, z);
 	}
 	i++;
-	printf("NEXT POINT %d\n", i);
+	//printf("NEXT POINT %d\n", i);
     }
 
     /*
