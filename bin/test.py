@@ -18,6 +18,6 @@ lidar.destroy()
 
 print("get data")
 #data = np.zeros((171, 224), dtype=np.double)
-data = lidar.get_data(None)
+data = lidar.get_data(None, 200)
 print(data.shape)
 
