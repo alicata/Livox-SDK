@@ -230,7 +230,7 @@ void CommandChannel::DeviceDisconnect(uint8_t handle) {
 }
 
 void CommandChannel::Send(const Command &command) {
-  LOG_INFO(" Send Command: Set {} Id {} Seq {}", (uint16_t)command.packet.cmd_set, command.packet.cmd_code, command.packet.seq_num);
+  //LOG_INFO(" Send Command: Set {} Id {} Seq {}", (uint16_t)command.packet.cmd_set, command.packet.cmd_code, command.packet.seq_num);
   SendInternal(command);
   commands_[command.packet.seq_num] = make_pair(command, apr_time_now() + apr_time_from_msec(command.time_out));
   Command &cmd = commands_[command.packet.seq_num].first;

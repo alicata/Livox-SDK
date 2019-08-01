@@ -101,7 +101,7 @@ void CommandHandler::Uninit() {
 
 void CommandHandler::OnCommand(uint8_t handle, const Command &command) {
   if (command.packet.packet_type == kCommandTypeAck) {
-    LOG_INFO(" Recieve Ack: Set {} Id {} Seq {}", (uint16_t)command.packet.cmd_set, command.packet.cmd_code, command.packet.seq_num);
+    //LOG_INFO(" Recieve Ack: Set {} Id {} Seq {}", (uint16_t)command.packet.cmd_set, command.packet.cmd_code, command.packet.seq_num);
     OnCommandAck(handle, command);
   } else if (command.packet.packet_type == kCommandTypeMsg) {
     LOG_INFO(" Recieve Message: Set {} Id {} Seq {}", (uint16_t)command.packet.cmd_set, command.packet.cmd_code, command.packet.seq_num);

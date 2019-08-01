@@ -364,6 +364,7 @@ py::array_t<double> Lidar::get_data(/* py::array_t<double> input, */ long ms)
 
     } 
     */
+    point_packet_list.clear();
     return result; 
 }
  

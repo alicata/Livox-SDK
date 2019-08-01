@@ -96,7 +96,7 @@ void DeviceManager::RemoveDevice(uint8_t handle) {
   if (handle < devices_.size()) {
     devices_[handle].connected = false;
   }
-  LOG_INFO(" Device {} removed ", (uint16_t)handle);
+  //LOG_INFO(" Device {} removed ", (uint16_t)handle);
 }
 
 void DeviceManager::BroadcastDevices(const BroadcastDeviceInfo *info) {
