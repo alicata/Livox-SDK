@@ -16,6 +16,6 @@ cv2.imwrite('depth_map_30x.png', depth_map*30)
 np.savetxt('points.txt', data, delimiter=',')
 
 print('second reading')
-depth_map, data = camera.read()
+depth_map, data = camera.read(1)
 print('data len ', len(data))
 
