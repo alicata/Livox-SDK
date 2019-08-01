@@ -322,15 +322,28 @@ bool Lidar::destroy() {
 py::array_t<double> Lidar::get_data(py::array_t<double> input)
 {
     size_t N = point_packet_list.size();
-    printf("num points: %d\n", (int)N);
     int PACK_POINT_NUM = 100;
+    //printf("num points: %d\n", (int)N);
+
+    py::array_t<double> output;
+    //auto result = py::array_t<double>(output.size);
+    //py::buffer_info buf_output = result.request();
+    //double * ptr_output = (double *) buf_output.ptr;
+
+
+    int i = 0;
     for (LvxBasePackDetail packet : point_packet_list) {
         for (int j; j < PACK_POINT_NUM; j++) {
 	    float x = packet.point[j].x;
 	    float y = packet.point[j].y;
 	    float z = packet.point[j].z;
-            printf("p=(%f,%f,%f)\n", x, y, z);
+	    //output[i*3+0] = x;
+	    //output[i*3+1] = y;
+	    //output[i*3+2] = z;
+            printf("%d p[pkt:%d]=(%f,%f,%f)\n", i, j, x, y, z);
 	}
+	i++;
+	printf("NEXT POINT %d\n", i);
     }
 
     /*
