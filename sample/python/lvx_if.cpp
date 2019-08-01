@@ -319,13 +319,18 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input)
     for (LvxBasePackDetail packet : point_packet_list) {
 	printf("lidar index: %d\n", packet.lidar_index);
 	//uint8_t device_index;
-        printf("uint8_t port_id %d\n", packet.port_id);
+        printf("uint8_t error %d\n", packet.error_code);
         //uint8_t rsvd;
         //uint32_t error_code;
         //uint8_t timestamp_type;
         //uint8_t data_type;
 	double* t = (double*)&packet.timestamp[0];
-        printf("uint8_t timestamp[8] %ld\n", *t);
+	for (int i=0; i < 8; i++) 
+	{
+	    printf("%d, ", packet.timestamp[i]);
+	}
+
+        printf("uint8_t timestamp[8] %lf\n", *t);
 	//LivoxPoint* pp = packet.point;
         printf("LivoxPoint array in packet.point: %ld\n", sizeof(packet.point));
         for (int j=0; j < PACK_POINT_NUM; j++) {
