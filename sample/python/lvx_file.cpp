@@ -107,6 +107,7 @@ void LvxFileHandle::BasePointsHandle(LivoxEthPacket *data, LvxBasePackDetail &pa
   packet.timestamp_type = data->timestamp_type;
   packet.data_type = data->data_type;
   memcpy(packet.timestamp, data->timestamp, 8 * sizeof(uint8_t));
+  float total = 0.0;
 
   if (packet.data_type == 0) {
     LivoxRawPoint tmp[PACK_POINT_NUM];
@@ -116,6 +117,7 @@ void LvxFileHandle::BasePointsHandle(LivoxEthPacket *data, LvxBasePackDetail &pa
       packet.point[i].y = static_cast<float>(tmp[i].y / 1000.0);
       packet.point[i].z = static_cast<float>(tmp[i].z / 1000.0);
       packet.point[i].reflectivity = tmp[i].reflectivity;
+      total += packet.point[i].x + packet.point[i].y + packet.point[i].z;
     }
   }
   else if (packet.data_type == 1) {
@@ -127,6 +129,10 @@ void LvxFileHandle::BasePointsHandle(LivoxEthPacket *data, LvxBasePackDetail &pa
       packet.point[i].z = static_cast<float>(tmp[i].phi);
       packet.point[i].reflectivity = tmp[i].reflectivity;
     }
+  }
+  
+  if (total < 0.000001) {
+    packet.error_code = 99;
   }
 }
 

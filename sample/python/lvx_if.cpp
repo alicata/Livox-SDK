@@ -64,8 +64,12 @@ void GetLidarData(uint8_t handle, LivoxEthPacket *data, uint32_t data_num, void 
       //printf("point cloud: id %d\n", data->id);
       //printf("point cloud: N %d \n", data_num);
       lvx_file_handler.BasePointsHandle(data, packet);
-      lvx_file_handler.CalcExtrinsicPoints(packet);
-      point_packet_list.push_back(packet);
+      // check packet data is not mostly empty:
+      if (packet.error_code != 99) 
+      {
+          lvx_file_handler.CalcExtrinsicPoints(packet);
+          point_packet_list.push_back(packet);
+      }
 
       if (point_packet_list.size() % (50 * broadcast_code_list.size()) == 0) {
         condition_variable.notify_one();
@@ -242,7 +246,7 @@ class Lidar {
       bool destroy();
       bool start();
       bool stop();
-      py::array_t<double> get_data(py::array_t<double>, long );
+      py::array_t<double> get_data(/* py::array_t<double>, */long );
      // uint* get_data() {return nullptr;}; 
 };
 
@@ -303,14 +307,14 @@ bool Lidar::destroy() {
     return true;
 }
 
-py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
+py::array_t<double> Lidar::get_data(/* py::array_t<double> input, */ long ms)
 {
     size_t N = point_packet_list.size();
     int PACK_POINT_NUM = 100;
     //printf("num points: %d\n", (int)N);
 
     //py::array_t<double> output;
-    auto result = py::array_t<double>(N*PACK_POINT_NUM*3);
+    auto result = py::array_t<double>(N*PACK_POINT_NUM*4);
     py::buffer_info buf_output = result.request();
     double * optr = (double *) buf_output.ptr;
 
@@ -337,9 +341,11 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
 	    float x = packet.point[j].x;
 	    float y = packet.point[j].y;
 	    float z = packet.point[j].z;
-	    optr[i*3+0] = x;
-	    optr[i*3+1] = y;
-	    optr[i*3+2] = z;
+	    uint8_t I = packet.point[j].reflectivity; 
+	    optr[i*4+0] = (double)x;
+	    optr[i*4+1] = (double)y;
+	    optr[i*4+2] = (double)z;
+	    optr[i*4+3] = (double)I;
             //printf("p[]=(%f,%f,%f)\n",  x, y, z);
 	}
 	i++;
@@ -373,7 +379,7 @@ PYBIND11_MODULE(lvx_binding, m) {
         .def("start", &Lidar::start)
         .def("stop", &Lidar::stop)
         .def("init", &Lidar::init)
-	.def("get_data", &Lidar::get_data)
+	      .def("get_data", &Lidar::get_data)
         .def("destroy", &Lidar::destroy);
 }
 
