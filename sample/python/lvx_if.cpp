@@ -242,7 +242,7 @@ class Lidar {
       bool destroy();
       bool start();
       bool stop();
-      py::array_t<double> get_data(py::array_t<double>);
+      py::array_t<double> get_data(py::array_t<double>, long );
      // uint* get_data() {return nullptr;}; 
 };
 
@@ -303,7 +303,7 @@ bool Lidar::destroy() {
     return true;
 }
 
-py::array_t<double> Lidar::get_data(py::array_t<double> input)
+py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
 {
     size_t N = point_packet_list.size();
     int PACK_POINT_NUM = 100;
@@ -324,13 +324,13 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input)
         //uint32_t error_code;
         //uint8_t timestamp_type;
         //uint8_t data_type;
-	double* t = (double*)&packet.timestamp[0];
+	long* t = (long*)&packet.timestamp[0];
 	for (int i=0; i < 8; i++) 
 	{
 	    printf("%d, ", packet.timestamp[i]);
 	}
 
-        printf("uint8_t timestamp[8] %lf\n", *t);
+        printf("uint8_t timestamp[8] %ld\n", *t);
 	//LivoxPoint* pp = packet.point;
         printf("LivoxPoint array in packet.point: %ld\n", sizeof(packet.point));
         for (int j=0; j < PACK_POINT_NUM; j++) {
@@ -340,7 +340,7 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input)
 	    //output[i*3+0] = x;
 	    //output[i*3+1] = y;
 	    //output[i*3+2] = z;
-            printf("%d p[pkt:%d]=(%f,%f,%f)\n", i, j, x, y, z);
+            printf("p[]=(%f,%f,%f)\n",  x, y, z);
 	}
 	i++;
 	printf("NEXT POINT %d\n", i);
