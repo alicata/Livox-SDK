@@ -358,7 +358,7 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input, long ms)
 
     } 
     */
-    return input;
+    return result; 
 }
  
 PYBIND11_MODULE(lvx_binding, m) {
