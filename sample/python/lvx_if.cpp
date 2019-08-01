@@ -334,6 +334,8 @@ py::array_t<double> Lidar::get_data(py::array_t<double> input)
     int i = 0;
     for (LvxBasePackDetail packet : point_packet_list) {
 	printf("lidar index: %d\n", packet.lidar_index);
+	//LivoxPoint* pp = packet.point;
+        printf("LivoxPoint array in packet.point: %ld\n", sizeof(packet.point));
         for (int j; j < PACK_POINT_NUM; j++) {
 	    float x = packet.point[j].x;
 	    float y = packet.point[j].y;
