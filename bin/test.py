@@ -4,6 +4,7 @@ import cv2
 
 import lvx_camera as lvx
 
+print("create lvx Camera")
 camera = lvx.Camera()
 
 print("set device codes ...")

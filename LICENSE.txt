@@ -1,4 +1,4 @@
-﻿The following portions of the LIVOX’s Livox SDK (“Software” referred to in the terms below) are made available to you under the terms of the MIT License provided below.  
+The following portions of the LIVOX’s Livox SDK (“Software” referred to in the terms below) are made available to you under the terms of the MIT License provided below.  
 
 Livox-SDK
 ├── CMakeLists.txt
