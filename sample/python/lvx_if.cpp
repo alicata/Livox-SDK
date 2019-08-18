@@ -28,6 +28,7 @@ int lvx_file_save_time = 10;
 bool is_finish_extrinsic_parameter = false;
 bool is_read_extrinsic_from_xml = false;
 
+
 #define FRAME_RATE 20
 
 /** Connect all the broadcast device in default and connect specific device when use program options or broadcast_code_list is not empty. */
@@ -36,6 +37,8 @@ std::vector<std::string> broadcast_code_list = {
   //"000000000000003",
   //"000000000000004"
 };
+
+std::vector<uint8_t> allowed_ids = {0, 1, 2, 3};
 
 py::array_t<double> get_array(py::array_t<double> input1) {
     py::buffer_info buf1 = input1.request();
@@ -56,7 +59,15 @@ py::array_t<double> get_array(py::array_t<double> input1) {
 /** Receiving point cloud data from Livox LiDAR. */
 void GetLidarData(uint8_t handle, LivoxEthPacket *data, uint32_t data_num, void *client_data) {
   if (data) {
-    if (handle < broadcast_code_list.size() && is_finish_extrinsic_parameter) {
+    // filter out unwanted lidar ids
+    bool allow_lidar_id = false;
+    for (int i = 0; i < allowed_ids.size(); i++) 
+    {
+       if (data->id == allowed_ids[i]) {
+         allow_lidar_id = true;
+       }
+    } 
+    if (allow_lidar_id && handle < broadcast_code_list.size() && is_finish_extrinsic_parameter) {
       std::lock_guard<std::mutex> lock(mtx);
       LvxBasePackDetail packet;
       packet.device_index = handle;
@@ -242,7 +253,7 @@ void app_sleep() {
 class Lidar {
     public:
       Lidar() {}
-      bool init();
+      bool init(long ids);
       bool destroy();
       bool start();
       bool stop();
@@ -250,11 +261,27 @@ class Lidar {
      // uint* get_data() {return nullptr;}; 
 };
 
-bool Lidar::init() {
+bool Lidar::init(long ids) {
     printf("Livox SDK initializing...\n");
     bool res = Init()==true;
 
     if (res==true) {
+        //create list of allowed ids from single long
+        if (ids > 0) 
+        {
+            allowed_ids.clear();
+
+            for (int i = 0; i < 10; i++) 
+            {
+                uint8_t id = pow(2, i);
+                if (ids && id) 
+                {
+                    printf("add to ids: %d\n", i);
+                    allowed_ids.push_back(i);
+                }
+            }
+        }
+
         printf("OK.\n");
         LivoxSdkVersion _sdkversion;
         GetLivoxSdkVersion(&_sdkversion);
