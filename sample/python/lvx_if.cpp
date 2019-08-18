@@ -258,6 +258,7 @@ class Lidar {
       bool start();
       bool stop();
       py::array_t<double> get_data(/* py::array_t<double>, */long );
+      void set_device_codes(std::vector<std::string> & list);
      // uint* get_data() {return nullptr;}; 
 };
 
@@ -334,6 +335,18 @@ bool Lidar::destroy() {
     return true;
 }
 
+void Lidar::set_device_codes(std::vector<std::string> &list)
+{
+
+    broadcast_code_list.clear();
+
+    for (auto item : list)
+    {
+	    printf("set device code: %s\n", item.c_str());
+	    broadcast_code_list.push_back(item);
+    } 
+}
+
 py::array_t<double> Lidar::get_data(/* py::array_t<double> input, */ long ms)
 {
     size_t N = point_packet_list.size();
@@ -407,7 +420,8 @@ PYBIND11_MODULE(lvx_binding, m) {
         .def("start", &Lidar::start)
         .def("stop", &Lidar::stop)
         .def("init", &Lidar::init)
-	      .def("get_data", &Lidar::get_data)
+	.def("get_data", &Lidar::get_data)
+	.def("set_device_codes", &Lidar::set_device_codes)
         .def("destroy", &Lidar::destroy);
 }
 

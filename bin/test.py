@@ -5,6 +5,10 @@ import cv2
 import lvx_camera as lvx
 
 camera = lvx.Camera()
+
+print("set device codes ...")
+camera.set_device_codes(["00", "01", "02"])
+
 print('START CAMERA ...')
 time.sleep(5)
 camera.start()
