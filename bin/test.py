@@ -8,7 +8,7 @@ print("create lvx Camera")
 camera = lvx.Camera()
 
 print("set device codes ...")
-camera.set_device_codes(["00", "01", "02"])
+camera.set_device_codes(["1LVDG1F006T8261", "1LVDG1F006T8262"])
 
 print('START CAMERA ...')
 time.sleep(5)

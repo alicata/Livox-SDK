@@ -76,11 +76,15 @@ class Camera:
     def destroy(self):
         self.lidar.destroy()
 
-    def read(self, timeout=0.200):
+    def slow_read(self):
+        time.sleep(3)
+        return self.read()
+
+    def read(self, timeout=0.100):
         data = np.zeros((171, 224), dtype=np.float64)
 
         time.sleep(timeout)
-        data = self.lidar.get_data(200)
+        data = self.lidar.get_data(100)
         data = np.reshape(data, (len(data)//4, 4))
         data = data[np.sum(data[:, 0:3], axis=1) > 0.000001]
 
@@ -88,7 +92,8 @@ class Camera:
         #print("point 0: ", data[0,:])
         #print("point L: ", data[-1,:])
 
-        X, Y, Z, I = data[:,0], data[:,1], data[:,2], data[:,3]
+        Z, X, Y, I = data[:,0], data[:,1], data[:,2], data[:,3]
+
         #print("Z:", Z[0:10])
         I = I.astype(np.uint8)
         #print("I channel:", I)
